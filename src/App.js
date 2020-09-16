@@ -1,24 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import ApolloClient from 'apollo-boost';
+import {gql} from 'apollo-boost';
 
-function App() {
+const client = new ApolloClient({
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
+});
+
+const App = () => {
+  const [posts, setPosts] = useState([])
+  client.query({
+    query: gql` 
+      {allPosts{
+        id
+        title
+        description
+      }}
+    `
+  })
+  .then(result => setPosts(result.data.allPosts))
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container p-5">
+      <div className="row p-5">
+        {posts.map((post) => (
+          <div className="col-md-4" key={post.id}>
+            <div className="card">
+              <div className="card-body">
+              <div className="card-title">
+              {post.title}
+              </div>
+              <div className="card-text">
+                {post.description}
+              </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
