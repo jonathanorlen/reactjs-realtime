@@ -3,18 +3,18 @@ import {auth} from '../../firebase';
 import { toast } from 'react-toastify';
 
 const Register = () => {
-     const [email, setEmail] = useState('pellondou.jo@gmail.com');
+     const [email, setEmail] = useState('');
      const [loading, setLoading] = useState('');
 
      const handleSubmit = async (e) => {
           e.preventDefault();
           setLoading(true);
           const config = {
-               url: process.env.REACT_APP_CONFIRMATION_EMAL_REDIRECT,
+               url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
                handleCodeInApp: true
-          }
-          const result = await auth.sendSignInLinkToEmail(email, config)
-          console.log(result);
+          };
+          const result = await auth.sendSignInLinkToEmail(email, config);
+          console.log('result', result);
           //show toast notification to user 
           toast.success(`Email send to result ${email}. Click the link to complete the registratio`)
           //save user email to localstorage
